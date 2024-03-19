@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class OrderGenerator {
-    // Initialize Scanner to read user inputs
+    // Initialize Scanner to read user input
     private static final Scanner in = new Scanner(System.in);
     // Array to store code 39 that's going to be used for checksum
     private static final char[] CODE_39_CHARS = {
