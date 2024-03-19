@@ -172,12 +172,16 @@ public class OrderGenerator {
             price.append("60.000");
         } 
 
-        return "Bill:\n" + //
-        "Order ID: HOLY1802202453C3\n" + //
-        "Tanggal Pemesanan: 18/02/2024\n" + //
-        "Lokasi Pengiriman: S\n" + //
-        "Biaya Ongkos Kirim: Rp 40.000\n" + //
-        "";
+        return String.format("Bill:%n" +
+        "Order ID: %s%n" +
+        "Tanggal Pemesanan: %s%n" +
+        "Lokasi Pengiriman: %s%n" +
+        "Biaya Ongkos Kirim: %s%n",
+        OrderID,
+        formattedOrderDate,
+        lokasi.toUpperCase(),
+        "Rp " + price);
+
     }
 
     public static void main(String[] args) {
