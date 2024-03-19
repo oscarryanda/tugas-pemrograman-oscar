@@ -180,7 +180,7 @@ public class OrderGenerator {
         OrderID,
         formattedOrderDate,
         lokasi.toUpperCase(),
-        "Rp " + price);
+        price);
 
     }
 
