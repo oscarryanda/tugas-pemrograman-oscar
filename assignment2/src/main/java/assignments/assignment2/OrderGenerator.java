@@ -1,14 +1,15 @@
-package assignments.assignment1;
+package assignments.assignment2;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OrderGenerator {
     // Initialize Scanner to read user inputs
     private static final Scanner in = new Scanner(System.in);
-    // Array to store code 39 that's going to be used for checksum
+    // Array to store code 39 that's gonna be used for checksum
     private static final char[] CODE_39_CHARS = {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -146,34 +147,35 @@ public class OrderGenerator {
 
     /**
      * Generate a bill from order ID and lokasi.
-     * @param OrderID Order ID
+     * @param orderID Order ID
      * @param lokasi lokasi
      * @return Generated bill
      */
-    public static String generateBill(String OrderID, String lokasi) {
+    public static String generateBill(String orderID, String lokasi, String namaResto, String orderStatus, String pesanan, double totalPrice) {
         // Get the date when the user ordered and format it
-        String datePart = OrderID.substring(4, 12); 
+        String datePart = orderID.substring(4, 12);
         DateTimeFormatter idDateFormat = DateTimeFormatter.ofPattern("ddMMyyyy");
         LocalDate orderDate = LocalDate.parse(datePart, idDateFormat);
         DateTimeFormatter displayDateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String formattedOrderDate = orderDate.format(displayDateFormat);
         
         // Set price based on location
-        StringBuilder price = new StringBuilder("Rp ");
+        int deliveryPrice = 0;
         if (lokasi.equalsIgnoreCase("p")) {
-            price.append("10.000");
+            deliveryPrice = 10000;
         } else if (lokasi.equalsIgnoreCase("u")) {
-            price.append("20.000");
+            deliveryPrice = 20000;
         } else if (lokasi.equalsIgnoreCase("t")) {
-            price.append("35.000");
+            deliveryPrice = 35000;
         } else if (lokasi.equalsIgnoreCase("s")) {
-            price.append("40.000");
+            deliveryPrice = 40000;
         } else if (lokasi.equalsIgnoreCase("b")) {
-            price.append("60.000");
-        } 
+            deliveryPrice = 60000;
+        }
 
-        return String.format("Bill:%nOrder ID: %s%nTanggal Pemesanan: %s%nLokasi Pengiriman: %s%nBiaya Ongkos Kirim: %s%n",
-                OrderID, formattedOrderDate, lokasi.toUpperCase(), price);
+        return String.format("\nBill:%nOrder ID: %s%nTanggal Pemesanan: %s%nRestaurant: %s%nLokasi Pengiriman: %s%nStatus Pengiriman: %s" +
+                        "%nPesanan:%n%sBiaya Ongkos Kirim: Rp %d%nTotal Biaya: Rp %.0f"
+                , orderID, formattedOrderDate, namaResto, lokasi, orderStatus, pesanan, deliveryPrice, totalPrice);
     }
 
     public static void main(String[] args) {
@@ -198,7 +200,7 @@ public class OrderGenerator {
                         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                         try {
-                            LocalDate.parse(date, dateFormat);
+                            LocalDate parsedDate = LocalDate.parse(date, dateFormat);
 
                         } catch (DateTimeParseException e) {
                             System.out.println("Tanggal Pemesanan dalam format DD/MM/YYYY!");
@@ -248,10 +250,10 @@ public class OrderGenerator {
                     
                     if (isValidLocation) {
                         // Print bill
-                        System.out.println("\n" + generateBill(id, lokasi)); 
                         break; 
                     } else {
                         System.out.println("Harap masukkan lokasi pengiriman yang ada pada jangkauan!\n");
+                        continue;
                     }
                 }
                 break;
