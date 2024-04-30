@@ -1,10 +1,9 @@
-package assignments.assignment2;
+package assignments.assignment3;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 public class Restaurant {
     private String nama;

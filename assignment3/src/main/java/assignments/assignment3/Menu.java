@@ -1,4 +1,4 @@
-package assignments.assignment2;
+package assignments.assignment3;
 
 public class Menu {
 

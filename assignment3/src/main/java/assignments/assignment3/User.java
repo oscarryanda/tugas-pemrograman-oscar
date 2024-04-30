@@ -1,5 +1,6 @@
-package assignments.assignment2;
+package assignments.assignment3;
 
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 import java.util.ArrayList;
 
@@ -10,11 +11,11 @@ public class User {
     private String email;
     private ArrayList<Order> orderHistory;
     public String role;
-    // private DepeFoodPaymentSystem payment;
+    private DepeFoodPaymentSystem payment;
     private long saldo;
 
     private String lokasi;
-    public User(String nama, String nomorTelepon, String email, String lokasi, String role, long saldo) {
+    public User(String nama, String nomorTelepon, String email, String lokasi, String role, DepeFoodPaymentSystem payment, long saldo) {
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
         this.email = email;
@@ -47,6 +48,18 @@ public class User {
             }
         }
         return false;
+    }
+
+    public long getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(long saldo) {
+        this.saldo = saldo;
+    }
+
+    public String getRole() {
+        return role;
     }
     @Override
     public String toString() {
