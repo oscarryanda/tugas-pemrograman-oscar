@@ -6,13 +6,11 @@ import assignments.assignment3.*;
 
 public abstract class UserSystemCLI {
     public static final Scanner input = new Scanner(System.in);
-    public static ArrayList<Restaurant> restoList = new ArrayList<>();
-    public static ArrayList<User> userList = new ArrayList<>();
-    public static User userLoggedIn; 
+
 
     public void run(User user) { 
-        this.userLoggedIn = user; 
-        System.out.print("Selamat datang " + userLoggedIn.getNama() + "!");
+
+        System.out.print("Selamat datang " + user.getNama() + "!");
         boolean isLoggedIn = true;
         while (isLoggedIn) {
             displayMenu();

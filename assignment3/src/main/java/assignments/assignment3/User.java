@@ -58,6 +58,10 @@ public class User {
         this.saldo = saldo;
     }
 
+    public void bayar(long price) {
+        this.saldo -= price;
+    }
+
     public String getRole() {
         return role;
     }

@@ -1,9 +1,16 @@
 package assignments.assignment3.systemCLI;
 
 import assignments.assignment3.*;
+
+import assignments.assignment3.payment.DebitPayment;
+
 import java.text.*;
 import java.util.*;
 
+import static assignments.assignment3.MainMenu.restoList;
+import static assignments.assignment3.MainMenu.userList;
+import static assignments.assignment3.MainMenu.userLoggedIn;
+import static assignments.assignment3.payment.CreditCardPayment.countTransactionFee;
 
 
 //TODO: Extends abstract class yang diberikan
@@ -27,6 +34,8 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
         return true;
     }
+
+
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     void displayMenu() {
@@ -165,22 +174,9 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
     }
 
-    // public static Order getOrderOrNull(String orderId) {
-    //     for (User user : userList) {
-    //         for (Order order : user.getOrderHistory()) {
-    //             if (order.getOrderId().equals(orderId)) {
-    //                 return order;
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
-
     public static Order getOrderOrNull(String orderId) {
         for (User user : userList) {
-            System.out.println("Checking orders for user: " + user.getNama()); // Debug log
             for (Order order : user.getOrderHistory()) {
-                System.out.println("Checking order with ID: " + order.getOrderId()); // Debug log
                 if (order.getOrderId().equals(orderId)) {
                     return order;
                 }
@@ -188,6 +184,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
         return null;
     }
+
 
     public static void handleLihatMenu(){
         System.out.println("--------------Lihat Menu----------------");
@@ -227,19 +224,52 @@ public class CustomerSystemCLI extends UserSystemCLI {
             }
             return;
         }
-
+    
     }
 
 
-
-    void handleBayarBill(){
-        // TODO: Implementasi method untuk handle ketika customer ingin melihat menu
-        // MainMenu.handleBayarBill();
+    void handleBayarBill() {
+        System.out.println("--------------Bayar Bill----------------");
+        while (true) {
+            System.out.print("Masukkan Order ID: ");
+            String orderId = input.nextLine().trim();
+            Order order = getOrderOrNull(orderId);
+            if (order == null) {
+                System.out.println("Order ID tidak dapat ditemukan.\n");
+                continue;
+            }
+            System.out.println("");
+            System.out.print(outputBillPesanan(order));
+            System.out.println("Opsi Pembayaran:");
+            System.out.println("1. Credit Card");
+            System.out.println("2. Debit");
+            System.out.print("Pilihan Metode Pembayaran: ");
+            String pilihanPembayaran = input.nextLine().trim();
+            if (pilihanPembayaran.equals("1")) {
+                userLoggedIn.bayar(order.getTotalHarga() + countTransactionFee(order.getTotalHarga()));
+                System.out.println("\nBerhasil Membayar Bill sebesar Rp " + order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + countTransactionFee(order.getTotalHarga()));
+                return;
+            } else if (pilihanPembayaran.equals("2")) {
+                if (DebitPayment.isPaymentValid(order.getTotalHarga())) {
+                    if (order.getTotalHarga() <= userLoggedIn.getSaldo()) {
+                        userLoggedIn.bayar(order.getTotalHarga() + countTransactionFee(order.getTotalHarga()));
+                        System.out.println("\nBerhasil Membayar Bill sebesar Rp " + order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + countTransactionFee(order.getTotalHarga()));
+                        return;
+                    } else {
+                        System.out.println("Saldo tidak cukup");
+                    }
+                } else {
+                    System.out.println("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
+                }
+            } else {
+                System.out.println("Pilihan tidak valid");
+            }
+        }
     }
 
 
     void handleCekSaldo(){
-        // TODO: Implementasi method untuk handle ketika customer ingin mengecek saldo yang dimiliki
-        // MainMenu.handleCekSaldo();
+        System.out.println("\nSisa saldo sebesar Rp " + userLoggedIn.getSaldo());
     }
 }
+

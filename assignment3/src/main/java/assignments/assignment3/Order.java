@@ -1,8 +1,5 @@
 package assignments.assignment3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class Order {
 
     private String OrderId;
@@ -59,11 +56,11 @@ public class Order {
         }
         return menuArr;
     }
-    public double getTotalHarga(){
+    public long getTotalHarga(){
         double sum = 0;
         for(Menu menu: getItems()){
             sum += menu.getHarga();
         }
-        return sum += getOngkir();
+        return (long) (sum += getOngkir());
     }
 }

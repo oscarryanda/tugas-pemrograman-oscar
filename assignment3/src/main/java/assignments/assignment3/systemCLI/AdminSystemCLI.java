@@ -1,7 +1,6 @@
 package assignments.assignment3.systemCLI;
 
-import static assignments.assignment3.systemCLI.UserSystemCLI.input;
-import static assignments.assignment3.systemCLI.UserSystemCLI.restoList;
+import static assignments.assignment3.MainMenu.restoList;
 
 import java.util.ArrayList;
 import java.util.Arrays;

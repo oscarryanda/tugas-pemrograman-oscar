@@ -5,7 +5,7 @@ public class DebitPayment implements DepeFoodPaymentSystem{
     // Anda dibebaskan untuk membuat method yang diperlukan
     private static final double MINIMUM_TOTAL_PRICE = 50000.0;
 
-    public boolean isPaymentValid(double price) {
+    public static boolean isPaymentValid(double price) {
         return price >= MINIMUM_TOTAL_PRICE;
     }
     

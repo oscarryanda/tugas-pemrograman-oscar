@@ -13,8 +13,9 @@ import assignments.assignment3.systemCLI.UserSystemCLI;
 public class MainMenu {
     private final Scanner input;
     private final LoginManager loginManager;
-    private static ArrayList<Restaurant> restoList;
-    private static ArrayList<User> userList;
+    public static ArrayList<Restaurant> restoList = new ArrayList<>();
+    public static ArrayList<User> userList;
+    public static User userLoggedIn;
 
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
@@ -51,7 +52,6 @@ public class MainMenu {
     System.out.print("Nomor Telepon: ");
     String noTelp = input.nextLine();
 
-    User userLoggedIn = null;
     for (User user : userList) {
         if (user.getNama().equalsIgnoreCase(nama) && user.getNomorTelepon().equals(noTelp)) {
             userLoggedIn = user;
@@ -88,6 +88,7 @@ public class MainMenu {
         System.out.println("--------------------------------------------");
         System.out.print("Pilihan menu: ");
     }
+
 
     public static void initUser(){
         userList = new ArrayList<User>();
