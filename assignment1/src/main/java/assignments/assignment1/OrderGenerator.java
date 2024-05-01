@@ -172,7 +172,7 @@ public class OrderGenerator {
             price.append("60.000");
         }
 
-        return "Bill:\n" + "Order ID: " + OrderID + "\nTanggal Pemesanan: " + datePart + "\nLokasi Pengiriman: " + lokasi.toUpperCase() + "\nBiaya Ongkos Kirim: Rp " + price + "\n" + "";
+        return "Bill:\n" + "Order ID: " + OrderID + "\nTanggal Pemesanan: " + formattedOrderDate + "\nLokasi Pengiriman: " + lokasi.toUpperCase() + "\nBiaya Ongkos Kirim: Rp " + price + "\n" + "";
 
     }
 
