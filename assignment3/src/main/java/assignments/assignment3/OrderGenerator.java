@@ -4,15 +4,11 @@ import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+
+// Class responsible for generating and managing orders and bills
 public class OrderGenerator {
     private static final Scanner input = new Scanner(System.in);
     private static final int ORDER_ID_LENGTH = 16;
-
-    /*
-     * Anda boleh membuat method baru sesuai kebutuhan Anda
-     * Namun, Anda tidak boleh menghapus ataupun memodifikasi return type method
-     * yang sudah ada.
-     */
 
     /*
      * Method ini untuk menampilkan DepeFood

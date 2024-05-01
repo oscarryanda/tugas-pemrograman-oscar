@@ -24,9 +24,11 @@ public class User {
         this.lokasi = lokasi;
         this.role = role;
         orderHistory = new ArrayList<>();
-        this.payment = payment;
+        this.payment = payment; // User payment method
         this.saldo = saldo;
     }
+
+    // Getters and Setters
     public String getEmail() {
         return email;
     }
@@ -85,7 +87,6 @@ public class User {
     }
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return String.format("User dengan nama %s dan nomor telepon %s", nama, nomorTelepon);
     }
 

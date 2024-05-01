@@ -9,6 +9,7 @@ public class Order {
     private boolean orderFinished;
     private Menu[] items;
 
+    // Constructor to initialize an Order object with necessary details
     public Order(String orderId, String tanggal, int ongkir, Restaurant resto, Menu[] items){
         this.OrderId = orderId;
         this.tanggal = tanggal;
@@ -17,6 +18,8 @@ public class Order {
         this.orderFinished = false;
         this.items = items;
     }
+
+    // Getters and Setters
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -38,8 +41,10 @@ public class Order {
     public Menu[] getItems() {
         return items;
     }
+
     public Menu[] getSortedMenu(){
         Menu[] menuArr = new Menu[getItems().length];
+        // Sort menu
         for(int i=0; i < getItems().length;i++){
             menuArr[i] = getItems()[i];
         }

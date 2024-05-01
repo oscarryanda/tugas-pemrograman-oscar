@@ -8,7 +8,7 @@ public class CreditCardPayment implements DepeFoodPaymentSystem {
         return Math.round(amount * TRANSACTION_FEE_PERCENTAGE);
     }
 
-    // Implement the processPayment method from DepeFoodPaymentSystem
+    // Process payment with transaction fee
     @Override
     public long processPayment(long amount) {
         long fee = countTransactionFee(amount);

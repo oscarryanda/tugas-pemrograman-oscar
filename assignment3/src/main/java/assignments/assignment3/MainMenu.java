@@ -2,33 +2,35 @@ package assignments.assignment3;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import assignments.assignment3.LoginManager;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.systemCLI.AdminSystemCLI;
 import assignments.assignment3.systemCLI.CustomerSystemCLI;
 import assignments.assignment3.systemCLI.UserSystemCLI;
 
+// Main class for handling the main menu and user interaction
 public class MainMenu {
-    private final Scanner input;
-    private final LoginManager loginManager;
-    public static ArrayList<Restaurant> restoList = new ArrayList<>();
-    public static ArrayList<User> userList;
-    public static User userLoggedIn;
-    public static Restaurant currentResto;
+    private final Scanner input;  // Scanner object for input operations
+    private final LoginManager loginManager;  // Manages user login and role-based CLI
+    public static ArrayList<Restaurant> restoList = new ArrayList<>();  // Static list of restaurants
+    public static ArrayList<User> userList;  // Static list of users
+    public static User userLoggedIn;  // Currently logged in user
+    public static Restaurant currentResto;  // Currently selected restaurant
 
+    // Constructor initializing MainMenu with a Scanner and a LoginManager
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
         this.loginManager = loginManager;
     }
 
+    // Entry point of the application
     public static void main(String[] args) {
         initUser();
         MainMenu mainMenu = new MainMenu(new Scanner(System.in), new LoginManager(new AdminSystemCLI(), new CustomerSystemCLI()));
         mainMenu.run();
     }
 
+    // Main loop handling menu selection and application flow
     public void run(){
         printHeader();
         boolean exit = false;
@@ -46,6 +48,7 @@ public class MainMenu {
         input.close();
     }
 
+    // Handles user login
     private void login(){
     System.out.println("\nSilakan Login:");
     System.out.print("Nama: ");
@@ -69,6 +72,7 @@ public class MainMenu {
     systemCLI.run(userLoggedIn);
 }
 
+    // Prints the application header
     private static void printHeader(){
         System.out.println("\n>>=======================================<<");
         System.out.println("|| ___                 ___             _ ||");
@@ -79,6 +83,7 @@ public class MainMenu {
         System.out.println(">>=======================================<<");
     }
 
+    // Displays the main menu
     private static void startMenu(){
         userLoggedIn = null;
         System.out.println("\nSelamat datang di DepeFood!");
@@ -90,7 +95,7 @@ public class MainMenu {
         System.out.print("Pilihan menu: ");
     }
 
-
+    // Initializes the list of users
     public static void initUser(){
         userList = new ArrayList<User>();
 

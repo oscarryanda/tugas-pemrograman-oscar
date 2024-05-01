@@ -1,7 +1,8 @@
 package assignments.assignment3.payment;
 
+// Interface for payment
 public interface DepeFoodPaymentSystem {
-    public long saldo = 0;
-    public long processPayment(long amount);
+    long saldo = 0;
+    long processPayment(long amount);
 
 }

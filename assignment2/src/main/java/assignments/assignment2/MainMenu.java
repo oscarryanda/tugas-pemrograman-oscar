@@ -18,7 +18,6 @@ public class MainMenu {
 
     public static void main(String[] args) {
         restoList = new ArrayList<>();
-//        initUser();
         boolean programRunning = true;
         while(programRunning){
             printHeader();

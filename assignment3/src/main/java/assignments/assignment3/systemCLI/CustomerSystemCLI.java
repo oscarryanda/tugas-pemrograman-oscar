@@ -1,7 +1,7 @@
 package assignments.assignment3.systemCLI;
 
 import assignments.assignment3.*;
-
+import static assignments.assignment3.MainMenu.*;
 import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.payment.DepeFoodPaymentSystem;
@@ -9,23 +9,22 @@ import assignments.assignment3.payment.DepeFoodPaymentSystem;
 import java.text.*;
 import java.util.*;
 
-import static assignments.assignment3.MainMenu.*;
-import static assignments.assignment3.payment.CreditCardPayment.countTransactionFee;
 
 
-//TODO: Extends abstract class yang diberikan
+
+// Defines the CLI for customer interactions
 public class CustomerSystemCLI extends UserSystemCLI {
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    // Handles menu selection based on user input
     @Override
     boolean handleMenu(int choice){
         switch(choice){
-            case 1 -> handleBuatPesanan();
-            case 2 -> handleCetakBill();
-            case 3 -> handleLihatMenu();
-            case 4 -> handleBayarBill();
-            case 5 -> handleCekSaldo();
-            case 6 -> {
+            case 1 -> handleBuatPesanan(); // Process creating a new order
+            case 2 -> handleCetakBill();  // Process printing the bill
+            case 3 -> handleLihatMenu();  // Display restaurant menu
+            case 4 -> handleBayarBill();  // Process payment of the bill
+            case 5 -> handleCekSaldo();   // Check balance
+            case 6 -> {     // Exit the menu
                 return false;
             }
             default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
@@ -35,11 +34,11 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
 
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    // Displays the menu options to the customer
     @Override
     void displayMenu() {
         System.out.println("\n--------------------------------------------");
-        System.out.println("Pilih menu:");
+        System.out.println("Pilih menu:"); 
         System.out.println("1. Buat Pesanan");
         System.out.println("2. Cetak Bill");
         System.out.println("3. Lihat Menu");
@@ -50,6 +49,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
+    // Handles the process of creating an order
     public static void handleBuatPesanan(){
         System.out.println("--------------Buat Pesanan----------------");
         while (true) {
@@ -90,12 +90,14 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Validates that the requested menu items exist in the restaurant's menu
     public static boolean validateRequestPesanan(Restaurant restaurant, List<String> listMenuPesananRequest){
         return listMenuPesananRequest.stream().allMatch(pesanan ->
                 restaurant.getMenu().stream().anyMatch(menu -> menu.getNamaMakanan().equals(pesanan))
         );
     }
 
+    // Generates a menu list from the requested items
     public static Menu[] getMenuRequest(Restaurant restaurant, List<String> listMenuPesananRequest){
         Menu[] menu = new Menu[listMenuPesananRequest.size()];
         for(int i=0;i<menu.length;i++){
@@ -108,6 +110,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return menu;
     }
 
+    // Formats the order details into a readable string
     public static String getMenuPesananOutput(Order order){
         StringBuilder pesananBuilder = new StringBuilder();
         DecimalFormat decimalFormat = new DecimalFormat();
@@ -123,6 +126,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return pesananBuilder.toString();
     }
 
+    // Formats the order details into a readable string
     public static String outputBillPesanan(Order order) {
         DecimalFormat decimalFormat = new DecimalFormat();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
@@ -149,7 +153,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
     }
 
 
-
+    // Get restaurant by name
     public static Restaurant getRestaurantByName(String name){
         Optional<Restaurant> restaurantMatched = restoList.stream().filter(restoran -> restoran.getNama().toLowerCase().equals(name.toLowerCase())).findFirst();
         if(restaurantMatched.isPresent()){
@@ -158,6 +162,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
+    // Handle print bill
     public static void handleCetakBill(){
         System.out.println("--------------Cetak Bill----------------");
         while (true) {
@@ -175,6 +180,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
     }
 
+    // Get order by id
     public static Order getOrderOrNull(String orderId) {
         for (User user : userList) {
             for (Order order : user.getOrderHistory()) {
@@ -186,7 +192,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return null;
     }
 
-
+    // Handle if customer wants too see the menu of a specific restaurant
     public static void handleLihatMenu(){
         System.out.println("--------------Lihat Menu----------------");
         while (true) {
@@ -202,10 +208,12 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Updates the status of an order to indicate it is completed
     public static void handleUpdateStatusPesanan(Order order){
         order.setOrderFinished(true);
     }
 
+    // Handles payment processing for an order
     void handleBayarBill() {
         System.out.println("--------------Bayar Bill----------------");
         while (true) {
@@ -273,6 +281,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
     }
 
 
+    // Displays the current balance of the logged-in user
     void handleCekSaldo(){
         System.out.println("\nSisa saldo sebesar Rp " + userLoggedIn.getSaldo());
     }

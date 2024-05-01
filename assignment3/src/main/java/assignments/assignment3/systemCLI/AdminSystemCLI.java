@@ -6,24 +6,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import assignments.assignment3.*;
 
-//TODO: Extends Abstract yang diberikan
+
 public class AdminSystemCLI extends UserSystemCLI {
 
     
     
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    // Override the handleMenu method to process admin commands
     @Override
     boolean handleMenu(int command){
         switch(command){
-            case 1 -> handleTambahRestoran();
-            case 2 -> handleHapusRestoran();
-            case 3 -> {return false;}
-            default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");
+            case 1 -> handleTambahRestoran(); // Handle adding a new restaurant
+            case 2 -> handleHapusRestoran();  // Handle removing an existing restaurant
+            case 3 -> {return false;}         // Exit the program
+            default -> System.out.println("Perintah tidak diketahui, silakan coba kembali");  // Handle unknown commands
         }
         return true;
     }
 
-    //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    // Override the displayMenu method to show admin options
     @Override
     void displayMenu() {
         System.out.println("\n--------------------------------------------");
@@ -35,20 +35,21 @@ public class AdminSystemCLI extends UserSystemCLI {
         System.out.print("Pilihan menu: ");
     }
 
+    // Handle the process of adding a new restaurant
     protected void handleTambahRestoran(){
         System.out.println("--------------Tambah Restoran---------------");
         Restaurant restaurant = null;
         while (restaurant == null) {
-            String namaRestaurant = getValidRestaurantName();
+            String namaRestaurant = getValidRestaurantName();  // Validate restaurant name
             restaurant = new Restaurant(namaRestaurant);
-            restaurant = handleTambahMenuRestaurant(restaurant);
+            restaurant = handleTambahMenuRestaurant(restaurant); // Add menu items to the restaurant
         }
         restoList.add(restaurant);
         System.out.print("Restaurant "+restaurant.getNama()+" Berhasil terdaftar." );
     }
 
+    // Handle the process of removing a restaurant
     protected void handleHapusRestoran(){
-        // TODO: Implementasi method untuk handle ketika admin ingin tambah restoran
         System.out.println("--------------Hapus Restoran----------------");
         boolean isActionDeleteEnded = false;
         while (!isActionDeleteEnded) {
@@ -67,6 +68,7 @@ public class AdminSystemCLI extends UserSystemCLI {
         }
     }
 
+    // Handle adding menu items to a new restaurant
     public static Restaurant handleTambahMenuRestaurant(Restaurant restoran){
         System.out.print("Jumlah Makanan: ");
         int  jumlahMenu = Integer.parseInt(input.nextLine().trim());
@@ -93,10 +95,12 @@ public class AdminSystemCLI extends UserSystemCLI {
         return isMenuValid? restoran : null;
     }
 
+    // Check if a string consists only of digits
     public static boolean checkIsDigit(String digits){
         return  digits.chars().allMatch(Character::isDigit);
     }
 
+    // Validate the uniqueness and length of the restaurant name
     public static String getValidRestaurantName() {
         String name = "";
         boolean isRestaurantNameValid = false;
