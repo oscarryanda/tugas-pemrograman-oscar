@@ -1,5 +1,7 @@
 package assignments.assignment3;
 
+import assignments.assignment3.payment.CreditCardPayment;
+import assignments.assignment3.payment.DebitPayment;
 import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 import java.util.ArrayList;
@@ -66,6 +68,20 @@ public class User {
 
     public String getRole() {
         return role;
+    }
+
+    public DepeFoodPaymentSystem getPaymentMethod() {
+        return this.payment;
+    }
+
+    // Metode untuk memeriksa apakah user memiliki metode pembayaran tertentu
+    public boolean hasPaymentMethod(int paymentType) {
+        // Pemeriksaan berdasarkan tipe yang diberikan (1 untuk Credit Card, 2 untuk Debit)
+        if ((paymentType == 1 && this.payment instanceof CreditCardPayment) ||
+                (paymentType == 2 && this.payment instanceof DebitPayment)) {
+            return true;
+        }
+        return false;
     }
     @Override
     public String toString() {

@@ -42,7 +42,7 @@ public class MainMenu {
                 default -> System.out.println("Pilihan tidak valid, silakan coba lagi.");
             }
         }
-
+        System.out.println("Terima kasih telah menggunakan DepeFood!");
         input.close();
     }
 
@@ -66,7 +66,7 @@ public class MainMenu {
 
 
     UserSystemCLI systemCLI = loginManager.getSystem(userLoggedIn.getRole());
-    systemCLI.run(userLoggedIn); // Assuming there is a method to run the CLI with the User object
+    systemCLI.run(userLoggedIn);
 }
 
     private static void printHeader(){
@@ -80,6 +80,7 @@ public class MainMenu {
     }
 
     private static void startMenu(){
+        userLoggedIn = null;
         System.out.println("\nSelamat datang di DepeFood!");
         System.out.println("--------------------------------------------");
         System.out.println("Pilih menu:");

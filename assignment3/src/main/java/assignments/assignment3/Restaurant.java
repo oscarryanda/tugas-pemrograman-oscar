@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Restaurant {
     private String nama;
     private ArrayList<Menu> menu;
-    private long saldo;
+    private long saldo = 0;
     
     public Restaurant(String nama){
         this.nama = nama;

@@ -131,6 +131,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
         return String.format("Bill:%n" +
                         "Order ID: %s%n" +
                         "Tanggal Pemesanan: %s%n" +
+                        "Restaurant: %s%n" +
                         "Lokasi Pengiriman: %s%n" +
                         "Status Pengiriman: %s%n"+
                         "Pesanan:%n%s%n"+
@@ -138,6 +139,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
                         "Total Biaya: Rp %s%n",
                 order.getOrderId(),
                 order.getTanggal(),
+                currentResto.getNama(),
                 userLoggedIn.getLokasi(),
                 !order.getOrderFinished()? "Not Finished":"Finished",
                 getMenuPesananOutput(order),
@@ -240,16 +242,22 @@ public class CustomerSystemCLI extends UserSystemCLI {
                     System.out.println("Pilihan tidak valid.");
                     continue;
             }
+            if (!userLoggedIn.hasPaymentMethod(Integer.parseInt(pilihanPembayaran))) {
+                System.out.println("User belum memiliki metode pembayaran ini!");
+                continue;
+            }
 
             long paymentResult = paymentMethod.processPayment(order.getTotalHarga());
             if (paymentResult > 0) {
-                userLoggedIn.bayar(paymentResult);
-                currentResto.transaksiResto(paymentResult);
                 handleUpdateStatusPesanan(order);
                 if (paymentMethod instanceof DebitPayment) {
+                    userLoggedIn.bayar(paymentResult);
+                    currentResto.transaksiResto(paymentResult);
                     System.out.println("\nBerhasil Membayar Bill sebesar Rp " + paymentResult);
                     return;
                 } else if (paymentMethod instanceof CreditCardPayment) {
+                    userLoggedIn.bayar(order.getTotalHarga() + paymentResult);
+                    currentResto.transaksiResto(order.getTotalHarga());
                     System.out.println("\nBerhasil Membayar Bill sebesar Rp " +
                             order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + paymentResult);
                     return;
