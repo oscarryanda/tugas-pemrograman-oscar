@@ -170,17 +170,9 @@ public class OrderGenerator {
             price.append("40.000");
         } else if (lokasi.equalsIgnoreCase("b")) {
             price.append("60.000");
-        } 
+        }
 
-        return String.format("Bill:%n" +
-        "Order ID: %s%n" +
-        "Tanggal Pemesanan: %s%n" +
-        "Lokasi Pengiriman: %s%n" +
-        "Biaya Ongkos Kirim: %s%n",
-        OrderID,
-        formattedOrderDate,
-        lokasi.toUpperCase(),
-        price);
+        return "Bill:\n" + "Order ID: " + OrderID + "\nTanggal Pemesanan: " + datePart + "\nLokasi Pengiriman: " + lokasi.toUpperCase() + "\nBiaya Ongkos Kirim: Rp " + price + "\n" + "";
 
     }
 
