@@ -16,6 +16,7 @@ public class MainMenu {
     public static ArrayList<Restaurant> restoList = new ArrayList<>();
     public static ArrayList<User> userList;
     public static User userLoggedIn;
+    public static Restaurant currentResto;
 
     public MainMenu(Scanner in, LoginManager loginManager) {
         this.input = in;
@@ -63,8 +64,7 @@ public class MainMenu {
         return;
     }
 
-    // Here you get the specific system CLI based on the role of the logged-in user
-    // and run it.
+
     UserSystemCLI systemCLI = loginManager.getSystem(userLoggedIn.getRole());
     systemCLI.run(userLoggedIn); // Assuming there is a method to run the CLI with the User object
 }

@@ -15,6 +15,10 @@ public class Restaurant {
         this.menu = new ArrayList<>();
     }
 
+    public void transaksiResto(double amount) {
+        this.saldo += amount;
+    }
+
     public String getNama() {
         return nama;
     }

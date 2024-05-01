@@ -22,6 +22,8 @@ public class User {
         this.lokasi = lokasi;
         this.role = role;
         orderHistory = new ArrayList<>();
+        this.payment = payment;
+        this.saldo = saldo;
     }
     public String getEmail() {
         return email;

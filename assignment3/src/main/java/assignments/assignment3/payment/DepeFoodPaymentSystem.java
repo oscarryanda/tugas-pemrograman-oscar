@@ -1,8 +1,7 @@
 package assignments.assignment3.payment;
 
 public interface DepeFoodPaymentSystem {
-    //TODO implementasikan interface di sini
-    default long processPayment(long amount) {
-        return amount;
-    }
+    public long saldo = 0;
+    public long processPayment(long amount);
+
 }

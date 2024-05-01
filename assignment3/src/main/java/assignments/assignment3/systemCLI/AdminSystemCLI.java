@@ -24,6 +24,7 @@ public class AdminSystemCLI extends UserSystemCLI {
     }
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    @Override
     void displayMenu() {
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");

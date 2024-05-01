@@ -2,21 +2,19 @@ package assignments.assignment3.systemCLI;
 
 import assignments.assignment3.*;
 
+import assignments.assignment3.payment.CreditCardPayment;
 import assignments.assignment3.payment.DebitPayment;
+import assignments.assignment3.payment.DepeFoodPaymentSystem;
 
 import java.text.*;
 import java.util.*;
 
-import static assignments.assignment3.MainMenu.restoList;
-import static assignments.assignment3.MainMenu.userList;
-import static assignments.assignment3.MainMenu.userLoggedIn;
+import static assignments.assignment3.MainMenu.*;
 import static assignments.assignment3.payment.CreditCardPayment.countTransactionFee;
 
 
 //TODO: Extends abstract class yang diberikan
 public class CustomerSystemCLI extends UserSystemCLI {
-    Scanner in = new Scanner(System.in);
-
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
     @Override
@@ -38,6 +36,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
 
 
     //TODO: Tambahkan modifier dan buatlah metode ini mengoverride dari Abstract class
+    @Override
     void displayMenu() {
         System.out.println("\n--------------------------------------------");
         System.out.println("Pilih menu:");
@@ -56,8 +55,8 @@ public class CustomerSystemCLI extends UserSystemCLI {
         while (true) {
             System.out.print("Nama Restoran: ");
             String restaurantName = input.nextLine().trim();
-            Restaurant restaurant = getRestaurantByName(restaurantName);
-            if(restaurant == null){
+            currentResto = getRestaurantByName(restaurantName);
+            if(currentResto == null){
                 System.out.println("Restoran tidak terdaftar pada sistem.\n");
                 continue;
             }
@@ -75,7 +74,7 @@ public class CustomerSystemCLI extends UserSystemCLI {
             for(int i=0; i < jumlahPesanan; i++){
                 listMenuPesananRequest.add(input.nextLine().trim());
             }
-            if(! validateRequestPesanan(restaurant, listMenuPesananRequest)){
+            if(! validateRequestPesanan(currentResto, listMenuPesananRequest)){
                 System.out.println("Mohon memesan menu yang tersedia di Restoran!");
                 continue;
             };
@@ -83,8 +82,8 @@ public class CustomerSystemCLI extends UserSystemCLI {
                     OrderGenerator.generateOrderID(restaurantName.toUpperCase(), tanggalPemesanan, userLoggedIn.getNomorTelepon()),
                     tanggalPemesanan,
                     OrderGenerator.calculateDeliveryCost(userLoggedIn.getLokasi()),
-                    restaurant,
-                    getMenuRequest(restaurant, listMenuPesananRequest));
+                    currentResto,
+                    getMenuRequest(currentResto, listMenuPesananRequest));
             System.out.printf("Pesanan dengan ID %s diterima!", order.getOrderId());
             userLoggedIn.addOrderHistory(order);
             return;
@@ -201,32 +200,9 @@ public class CustomerSystemCLI extends UserSystemCLI {
         }
     }
 
-    public static void handleUpdateStatusPesanan(){
-        System.out.println("--------------Update Status Pesanan---------------");
-        while (true) {
-            System.out.print("Order ID: ");
-            String orderId = input.nextLine().trim();
-            Order order = getOrderOrNull(orderId);
-            if(order == null){
-                System.out.println("Order ID tidak dapat ditemukan.\n");
-                continue;
-            }
-            System.out.print("Status: ");
-            String newStatus = input.nextLine().trim();
-            if(newStatus.toLowerCase().equals("SELESAI".toLowerCase())){
-                if(order.getOrderFinished() == true){
-                    System.out.printf("Status pesanan dengan ID %s tidak berhasil diupdate!", order.getOrderId());
-                }
-                else{
-                    System.out.printf("Status pesanan dengan ID %s berhasil diupdate!", order.getOrderId());
-                    order.setOrderFinished(true);
-                }
-            }
-            return;
-        }
-    
+    public static void handleUpdateStatusPesanan(Order order){
+        order.setOrderFinished(true);
     }
-
 
     void handleBayarBill() {
         System.out.println("--------------Bayar Bill----------------");
@@ -238,6 +214,12 @@ public class CustomerSystemCLI extends UserSystemCLI {
                 System.out.println("Order ID tidak dapat ditemukan.\n");
                 continue;
             }
+
+            if (order.getOrderFinished()) {
+                System.out.println("Pesanan dengan ID ini sudah lunas!");
+                continue;
+            }
+
             System.out.println("");
             System.out.print(outputBillPesanan(order));
             System.out.println("Opsi Pembayaran:");
@@ -245,24 +227,39 @@ public class CustomerSystemCLI extends UserSystemCLI {
             System.out.println("2. Debit");
             System.out.print("Pilihan Metode Pembayaran: ");
             String pilihanPembayaran = input.nextLine().trim();
-            if (pilihanPembayaran.equals("1")) {
-                userLoggedIn.bayar(order.getTotalHarga() + countTransactionFee(order.getTotalHarga()));
-                System.out.println("\nBerhasil Membayar Bill sebesar Rp " + order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + countTransactionFee(order.getTotalHarga()));
-                return;
-            } else if (pilihanPembayaran.equals("2")) {
-                if (DebitPayment.isPaymentValid(order.getTotalHarga())) {
-                    if (order.getTotalHarga() <= userLoggedIn.getSaldo()) {
-                        userLoggedIn.bayar(order.getTotalHarga() + countTransactionFee(order.getTotalHarga()));
-                        System.out.println("\nBerhasil Membayar Bill sebesar Rp " + order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + countTransactionFee(order.getTotalHarga()));
-                        return;
-                    } else {
-                        System.out.println("Saldo tidak cukup");
-                    }
-                } else {
-                    System.out.println("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
+            DepeFoodPaymentSystem paymentMethod;
+
+            switch (pilihanPembayaran) {
+                case "1":
+                    paymentMethod = new CreditCardPayment();
+                    break;
+                case "2":
+                    paymentMethod = new DebitPayment();
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid.");
+                    continue;
+            }
+
+            long paymentResult = paymentMethod.processPayment(order.getTotalHarga());
+            if (paymentResult > 0) {
+                userLoggedIn.bayar(paymentResult);
+                currentResto.transaksiResto(paymentResult);
+                handleUpdateStatusPesanan(order);
+                if (paymentMethod instanceof DebitPayment) {
+                    System.out.println("\nBerhasil Membayar Bill sebesar Rp " + paymentResult);
+                    return;
+                } else if (paymentMethod instanceof CreditCardPayment) {
+                    System.out.println("\nBerhasil Membayar Bill sebesar Rp " +
+                            order.getTotalHarga() + " dengan biaya transaksi sebesar Rp " + paymentResult);
+                    return;
                 }
-            } else {
-                System.out.println("Pilihan tidak valid");
+
+            } else if (paymentResult == 0) {
+                System.out.println("Jumlah pesanan < 50000 mohon menggunakan metode pembayaran yang lain");
+            }
+            else {
+                System.out.println("Saldo tidak mencukupi mohon menggunakan metode pembayaran yang lain");
             }
         }
     }
