@@ -1,20 +1,17 @@
 package assignments.assignment2;
 
-
 import java.util.ArrayList;
 
 public class User {
-
+    
     private String nama;
     private String nomorTelepon;
     private String email;
     private ArrayList<Order> orderHistory;
     public String role;
-    // private DepeFoodPaymentSystem payment;
-    private long saldo;
 
     private String lokasi;
-    public User(String nama, String nomorTelepon, String email, String lokasi, String role, long saldo) {
+    public User(String nama, String nomorTelepon, String email, String lokasi, String role){
         this.nama = nama;
         this.nomorTelepon = nomorTelepon;
         this.email = email;

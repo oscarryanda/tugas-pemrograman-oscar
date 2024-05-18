@@ -5,17 +5,14 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class Restaurant {
     private String nama;
     private ArrayList<Menu> menu;
-    private long saldo;
-    
     public Restaurant(String nama){
         this.nama = nama;
         this.menu = new ArrayList<>();
     }
-
+    
     public String getNama() {
         return nama;
     }
@@ -35,7 +32,7 @@ public class Restaurant {
         for (int i = 0; i < n-1; i++) {
             for (int j = 0; j < n-i-1; j++) {
                 if (menuArr[j].getHarga() > menuArr[j+1].getHarga()) {
-
+                    
                     Menu temp = menuArr[j];
                     menuArr[j] = menuArr[j+1];
                     menuArr[j+1] = temp;

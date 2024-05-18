@@ -7,17 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
-
-
+import assignments.assignment1.OrderGenerator;
 
 public class MainMenu {
     private static final Scanner input = new Scanner(System.in);
-    private static ArrayList<Restaurant> restoList = new ArrayList<>();
-    private static ArrayList<User> userList = new ArrayList<>();
+    private static ArrayList<Restaurant> restoList;
+    private static ArrayList<User> userList;
     private static User userLoggedIn;
 
     public static void main(String[] args) {
         restoList = new ArrayList<>();
+        initUser();
         boolean programRunning = true;
         while(programRunning){
             printHeader();
@@ -118,9 +118,9 @@ public class MainMenu {
             };
             Order order = new Order(
                     OrderGenerator.generateOrderID(restaurantName, tanggalPemesanan, userLoggedIn.getNomorTelepon()),
-                    tanggalPemesanan,
-                    OrderGenerator.calculateDeliveryCost(userLoggedIn.getLokasi()),
-                    restaurant,
+                    tanggalPemesanan, 
+                    OrderGenerator.calculateDeliveryCost(userLoggedIn.getLokasi()), 
+                    restaurant, 
                     getMenuRequest(restaurant, listMenuPesananRequest));
             System.out.printf("Pesanan dengan ID %s diterima!", order.getOrderId());
             userLoggedIn.addOrderHistory(order);
@@ -129,8 +129,8 @@ public class MainMenu {
     }
 
     public static boolean validateRequestPesanan(Restaurant restaurant, List<String> listMenuPesananRequest){
-        return listMenuPesananRequest.stream().allMatch(pesanan ->
-                restaurant.getMenu().stream().anyMatch(menu -> menu.getNamaMakanan().equals(pesanan))
+        return listMenuPesananRequest.stream().allMatch(pesanan -> 
+            restaurant.getMenu().stream().anyMatch(menu -> menu.getNamaMakanan().equals(pesanan))
         );
     }
 
@@ -167,21 +167,21 @@ public class MainMenu {
         symbols.setGroupingSeparator('.');
         decimalFormat.setDecimalFormatSymbols(symbols);
         return String.format("Bill:%n" +
-                        "Order ID: %s%n" +
-                        "Tanggal Pemesanan: %s%n" +
-                        "Lokasi Pengiriman: %s%n" +
-                        "Status Pengiriman: %s%n"+
-                        "Pesanan:%n%s%n"+
-                        "Biaya Ongkos Kirim: Rp %s%n"+
-                        "Total Biaya: Rp %s%n",
-                order.getOrderId(),
-                order.getTanggal(),
-                userLoggedIn.getLokasi(),
-                !order.getOrderFinished()? "Not Finished":"Finished",
-                getMenuPesananOutput(order),
-                decimalFormat.format(order.getOngkir()),
-                decimalFormat.format(order.getTotalHarga())
-        );
+                         "Order ID: %s%n" +
+                         "Tanggal Pemesanan: %s%n" +
+                         "Lokasi Pengiriman: %s%n" +
+                         "Status Pengiriman: %s%n"+
+                         "Pesanan:%n%s%n"+
+                         "Biaya Ongkos Kirim: Rp %s%n"+
+                         "Total Biaya: Rp %s%n",
+                         order.getOrderId(),
+                         order.getTanggal(),
+                         userLoggedIn.getLokasi(),
+                         !order.getOrderFinished()? "Not Finished":"Finished",
+                         getMenuPesananOutput(order),
+                         decimalFormat.format(order.getOngkir()),
+                         decimalFormat.format(order.getTotalHarga())
+                         );
     }
 
 
@@ -208,7 +208,7 @@ public class MainMenu {
             System.out.print(outputBillPesanan(order));
             return;
         }
-
+        
     }
 
     public static Order getOrderOrNull(String orderId) {
@@ -298,24 +298,24 @@ public class MainMenu {
             System.out.println();
         }
 
-        return isMenuValid? restoran : null;
+        return isMenuValid? restoran : null; 
     }
 
     public static boolean checkIsDigit(String digits){
         return  digits.chars().allMatch(Character::isDigit);
     }
-
+    
     public static String getValidRestaurantName() {
         String name = "";
         boolean isRestaurantNameValid = false;
-
+    
         while (!isRestaurantNameValid) {
             System.out.print("Nama: ");
             String inputName = input.nextLine().trim();
             boolean isRestaurantExist = restoList.stream()
                     .anyMatch(restoran -> restoran.getNama().toLowerCase().equals(inputName.toLowerCase()));
             boolean isRestaurantNameLengthValid = inputName.length() >= 4;
-
+    
             if (isRestaurantExist) {
                 System.out.printf("Restoran dengan nama %s sudah pernah terdaftar. Mohon masukkan nama yang berbeda!%n", inputName);
                 System.out.println();
@@ -329,7 +329,7 @@ public class MainMenu {
         }
         return name;
     }
-
+    
 
     public static void handleHapusRestoran(){
         System.out.println("--------------Hapus Restoran----------------");
@@ -350,17 +350,17 @@ public class MainMenu {
         }
     }
 
-//    public static void initUser(){
-//        userList = new ArrayList<User>();
-//        userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
-//        userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
-//        userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
-//        userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));
-//        userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer"));
-//
-//        userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin"));
-//        userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin"));
-//    }
+    public static void initUser(){
+       userList = new ArrayList<User>();
+       userList.add(new User("Thomas N", "9928765403", "thomas.n@gmail.com", "P", "Customer"));
+       userList.add(new User("Sekar Andita", "089877658190", "dita.sekar@gmail.com", "B", "Customer"));
+       userList.add(new User("Sofita Yasusa", "084789607222", "sofita.susa@gmail.com", "T", "Customer"));
+       userList.add(new User("Dekdepe G", "080811236789", "ddp2.gampang@gmail.com", "S", "Customer"));
+       userList.add(new User("Aurora Anum", "087788129043", "a.anum@gmail.com", "U", "Customer"));
+
+       userList.add(new User("Admin", "123456789", "admin@gmail.com", "-", "Admin"));
+       userList.add(new User("Admin Baik", "9123912308", "admin.b@gmail.com", "-", "Admin"));
+    }
 
     public static void printHeader(){
         System.out.println("\n>>=======================================<<");
