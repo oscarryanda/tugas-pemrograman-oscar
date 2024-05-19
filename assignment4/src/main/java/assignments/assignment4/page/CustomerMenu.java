@@ -51,6 +51,7 @@ public class CustomerMenu extends MemberMenu {
     private Label saldoLabel;
     private Label userNameLabel;
 
+    // Constructor
     public CustomerMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
@@ -64,8 +65,10 @@ public class CustomerMenu extends MemberMenu {
         this.orderItems = new HashMap<>();
     }
 
+    // Method to create base menu
     @Override
     public Scene createBaseMenu() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -73,10 +76,12 @@ public class CustomerMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Customer Menu");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create buttons
         Button addOrderButton = new Button("Tambah Pesanan");
         addOrderButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
@@ -92,6 +97,7 @@ public class CustomerMenu extends MemberMenu {
         Button logoutButton = new Button("Logout");
         logoutButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
+        // Add event handlers
         addOrderButton.setOnAction(e -> stage.setScene(addOrderScene));
         printBillButton.setOnAction(e -> stage.setScene(printBillScene));
         payBillButton.setOnAction(e -> stage.setScene(payBillScene));
@@ -101,6 +107,7 @@ public class CustomerMenu extends MemberMenu {
             ((LoginForm) mainApp.getScene("Login").getUserData()).clearInputs(); // Clear inputs on logout
         });
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(addOrderButton, 0, 1, 2, 1);
@@ -112,7 +119,9 @@ public class CustomerMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to create add order form
     private Scene createTambahPesananForm() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -120,10 +129,12 @@ public class CustomerMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Tambah Pesanan");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create combo box, text fields, and buttons
         restaurantComboBox = new ComboBox<>();
         updateRestaurantComboBox();
         restaurantComboBox.setPromptText("Pilih Restoran");
@@ -143,15 +154,17 @@ public class CustomerMenu extends MemberMenu {
         Button backButton = new Button("Kembali");
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
+        // Add event handlers
         submitButton.setOnAction(e -> {
             handleBuatPesanan(
-                restaurantComboBox.getValue(),
-                orderDateField.getText(),
-                new ArrayList<>(orderItems.keySet())
+                    restaurantComboBox.getValue(),
+                    orderDateField.getText(),
+                    new ArrayList<>(orderItems.keySet())
             );
         });
         backButton.setOnAction(e -> stage.setScene(scene));
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(new Label("Pilih Restoran:"), 0, 1);
@@ -166,11 +179,14 @@ public class CustomerMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to create bill printer form
     private Scene createBillPrinter() {
         return billPrinter.createBillPrinterForm();
     }
 
+    // Method to create pay bill form
     private Scene createBayarBillForm() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -178,10 +194,12 @@ public class CustomerMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Bayar Bill");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create text fields, combo box, and buttons
         TextField orderIDField = new TextField();
         orderIDField.setPromptText("Order ID");
         orderIDField.setStyle("-fx-control-inner-background: #D8BFD8;");
@@ -192,13 +210,15 @@ public class CustomerMenu extends MemberMenu {
 
         Button submitButton = new Button("Submit");
         submitButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
-        
+
         Button backButton = new Button("Kembali");
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
+        // Add event handlers
         submitButton.setOnAction(e -> handleBayarBill(orderIDField.getText(), paymentOptions.getValue()));
         backButton.setOnAction(e -> stage.setScene(scene));
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(new Label("Order ID:"), 0, 1);
@@ -212,7 +232,9 @@ public class CustomerMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to create check balance scene
     private Scene createCekSaldoScene() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -220,10 +242,12 @@ public class CustomerMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Cek Saldo");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create labels and button
         userNameLabel = new Label("Nama User: " + user.getNama());
         userNameLabel.setFont(new Font("Arial", 16));
         userNameLabel.setTextFill(Color.DARKSLATEBLUE);
@@ -236,6 +260,7 @@ public class CustomerMenu extends MemberMenu {
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
         backButton.setOnAction(e -> stage.setScene(scene));
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(userNameLabel, 0, 1, 2, 1);
@@ -248,6 +273,7 @@ public class CustomerMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to handle creating an order
     private void handleBuatPesanan(String namaRestoran, String tanggalPemesanan, List<Menu> menuItems) {
         if (namaRestoran == null || tanggalPemesanan == null || menuItems == null || menuItems.isEmpty()) {
             showAlert("Error", "Pesanan gagal", "Field tidak boleh kosong", Alert.AlertType.ERROR);
@@ -266,12 +292,12 @@ public class CustomerMenu extends MemberMenu {
         }
 
         List<String> validMenuItems = menuItems.stream()
-            .map(Menu::getNamaMakanan)
-            .collect(Collectors.toList());
+                .map(Menu::getNamaMakanan)
+                .collect(Collectors.toList());
 
         List<Integer> quantities = menuItems.stream()
-            .map(menu -> orderItems.get(menu))
-            .collect(Collectors.toList());
+                .map(menu -> orderItems.get(menu))
+                .collect(Collectors.toList());
 
         String orderID = DepeFood.handleBuatPesanan(namaRestoran, tanggalPemesanan, validMenuItems, quantities);
         if (orderID != null) {
@@ -281,17 +307,19 @@ public class CustomerMenu extends MemberMenu {
         }
     }
 
+    // Method to update the restaurant combo box
     private void updateRestaurantComboBox() {
         restaurantComboBox.setItems(FXCollections.observableArrayList(
-            DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList())
+                DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList())
         ));
     }
 
+    // Method to update the menu box
     private void updateMenuBox(String restaurantName) {
         Restaurant restaurant = DepeFood.getRestaurantByName(restaurantName);
         menuBox.getChildren().clear();
         orderItems.clear();
-        
+
         if (restaurant != null) {
             for (Menu menu : restaurant.getMenu()) {
                 HBox menuItemBox = new HBox(10);
@@ -302,7 +330,7 @@ public class CustomerMenu extends MemberMenu {
                 Button subtractButton = new Button("-");
                 Label quantityLabel = new Label("0");
                 quantityLabel.setStyle("-fx-background-color: white; -fx-padding: 5px; -fx-border-radius: 5px; -fx-background-radius: 5px;");
-                
+
                 addButton.setOnAction(e -> {
                     int quantity = orderItems.getOrDefault(menu, 0) + 1;
                     orderItems.put(menu, quantity);
@@ -328,31 +356,32 @@ public class CustomerMenu extends MemberMenu {
         }
     }
 
+    // Method to handle paying a bill
     private void handleBayarBill(String orderID, String paymentOption) {
         if (orderID.isEmpty() || paymentOption == null) {
             showAlert("Error", "Pembayaran gagal", "Field tidak boleh kosong", Alert.AlertType.ERROR);
             return;
         }
-    
+
         Order order = DepeFood.getOrderOrNull(orderID);
         if (order == null) {
             showAlert("Error", "Pembayaran gagal", "Order ID tidak ditemukan", Alert.AlertType.ERROR);
             return;
         }
-    
+
         if (order.getOrderFinished()) {
             showAlert("Error", "Pembayaran gagal", "Order sudah dibayar", Alert.AlertType.ERROR);
             return;
         }
-    
+
         DepeFoodPaymentSystem paymentSystem = DepeFood.getUserLoggedIn().getPaymentSystem();
-    
+
         boolean isCreditCard = paymentSystem instanceof CreditCardPayment;
         if ((isCreditCard && paymentOption.equals("Debit")) || (!isCreditCard && paymentOption.equals("Credit Card"))) {
             showAlert("Error", "Pembayaran gagal", "User belum memiliki metode pembayaran ini", Alert.AlertType.ERROR);
             return;
         }
-    
+
         try {
             DepeFood.handleBayarBill(orderID, paymentOption);
             showAlert("Success", "Pembayaran berhasil", "Pembayaran berhasil dilakukan", Alert.AlertType.INFORMATION);
@@ -363,6 +392,7 @@ public class CustomerMenu extends MemberMenu {
         }
     }
 
+    // Method to show alert
     private void showAlert(String title, String content, Alert.AlertType alertType) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -373,6 +403,7 @@ public class CustomerMenu extends MemberMenu {
         alert.showAndWait();
     }
 
+    // Method to refresh the UI
     @Override
     protected void refresh() {
         super.refresh();

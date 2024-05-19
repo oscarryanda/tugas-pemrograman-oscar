@@ -5,10 +5,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 
 public abstract class MemberMenu {
+    // Initialize scene
     private Scene scene;
 
+    // Method to be overridden by subclasses
     abstract protected Scene createBaseMenu();
 
+    // Show alert
     protected void showAlert(String title, String header, String content, Alert.AlertType c) {
         Alert alert = new Alert(c);
         alert.setTitle(title);
@@ -17,6 +20,7 @@ public abstract class MemberMenu {
         alert.showAndWait();
     }
 
+    // Getters and setters
     public Scene getScene() {
         return this.scene;
     }
@@ -25,6 +29,7 @@ public abstract class MemberMenu {
         this.scene = scene;
     }
 
+    // Refresh data
     protected void refresh() {
         DepeFood.initUser();
         DepeFood.getRestoList().clear();

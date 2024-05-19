@@ -35,7 +35,9 @@ public class AdminMenu extends MemberMenu {
     private ComboBox<String> restaurantComboBox;
     private ComboBox<String> viewRestaurantComboBox;
     private ListView<String> menuListView;
+    private ListView<String> restaurantListView; // ListView to display the list of restaurants
 
+    // Constructor
     public AdminMenu(Stage stage, MainApp mainApp, User user) {
         this.stage = stage;
         this.mainApp = mainApp;
@@ -44,10 +46,13 @@ public class AdminMenu extends MemberMenu {
         this.addRestaurantScene = createAddRestaurantForm();
         this.addMenuScene = createAddMenuForm();
         this.viewRestaurantsScene = createViewRestaurantsForm();
+        this.restaurantListView = new ListView<>(); // Initialize the ListView
     }
 
+    // Method to create base menu
     @Override
     public Scene createBaseMenu() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -55,10 +60,12 @@ public class AdminMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Admin Login Menu");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create buttons
         Button addRestaurantButton = new Button("Tambah Restoran");
         addRestaurantButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
@@ -71,6 +78,7 @@ public class AdminMenu extends MemberMenu {
         Button logoutButton = new Button("Logout");
         logoutButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
+        // Add event handlers
         addRestaurantButton.setOnAction(e -> stage.setScene(addRestaurantScene));
         addMenuButton.setOnAction(e -> {
             updateRestaurantComboBox();
@@ -83,6 +91,7 @@ public class AdminMenu extends MemberMenu {
 
         logoutButton.setOnAction(e -> mainApp.logout());
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(addRestaurantButton, 0, 1, 2, 1);
@@ -93,7 +102,9 @@ public class AdminMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to create add restaurant form
     private Scene createAddRestaurantForm() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -101,26 +112,35 @@ public class AdminMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Tambah Restoran");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create text field and buttons
         TextField restaurantNameField = new TextField();
         restaurantNameField.setPromptText("Nama Restoran");
         restaurantNameField.setStyle("-fx-control-inner-background: #D8BFD8;");
 
         Button submitButton = new Button("Submit");
         submitButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
-        
+
         Button backButton = new Button("Kembali");
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
-        submitButton.setOnAction(e -> handleTambahRestoran(restaurantNameField.getText()));
+        // Add event handlers
+        submitButton.setOnAction(e -> {
+            handleTambahRestoran(restaurantNameField.getText());
+            updateRestaurantListView(); // Update the list of restaurants
+        });
         backButton.setOnAction(e -> stage.setScene(scene));
 
-        // Add event handler for Enter key
-        restaurantNameField.setOnAction(e -> handleTambahRestoran(restaurantNameField.getText()));
+        restaurantNameField.setOnAction(e -> {
+            handleTambahRestoran(restaurantNameField.getText());
+            updateRestaurantListView(); // Update the list of restaurants
+        });
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(new Label("Nama Restoran:"), 0, 1);
@@ -132,7 +152,9 @@ public class AdminMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to create add menu form
     private Scene createAddMenuForm() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -140,10 +162,12 @@ public class AdminMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Tambah Menu Restoran");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create combo box, text fields, and buttons
         restaurantComboBox = new ComboBox<>();
         updateRestaurantComboBox();
         restaurantComboBox.setPromptText("Pilih Restoran");
@@ -159,11 +183,13 @@ public class AdminMenu extends MemberMenu {
 
         Button submitButton = new Button("Submit");
         submitButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
-        
+
         Button backButton = new Button("Kembali");
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
 
+        // Add event handlers
         submitButton.setOnAction(e -> {
+            // Validate input
             if (restaurantComboBox.getValue() == null || itemNameField.getText().isEmpty() || priceField.getText().isEmpty()) {
                 showAlert("Error", "Textfield tidak boleh kosong", Alert.AlertType.ERROR);
                 return;
@@ -171,9 +197,9 @@ public class AdminMenu extends MemberMenu {
             try {
                 double price = Double.parseDouble(priceField.getText());
                 handleTambahMenuRestoran(
-                    DepeFood.getRestaurantByName(restaurantComboBox.getValue()), 
-                    itemNameField.getText(), 
-                    price
+                        DepeFood.getRestaurantByName(restaurantComboBox.getValue()),
+                        itemNameField.getText(),
+                        price
                 );
                 updateRestaurantListView(); // Ensure the list is updated after adding menu
             } catch (NumberFormatException ex) {
@@ -182,6 +208,7 @@ public class AdminMenu extends MemberMenu {
         });
         backButton.setOnAction(e -> stage.setScene(scene));
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(new Label("Pilih Restoran:"), 0, 1);
@@ -198,6 +225,7 @@ public class AdminMenu extends MemberMenu {
     }
 
     private Scene createViewRestaurantsForm() {
+        // Create grid pane
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setVgap(10);
@@ -205,10 +233,12 @@ public class AdminMenu extends MemberMenu {
         grid.setPadding(new Insets(25, 25, 25, 25));
         grid.setStyle("-fx-background-color: #E6E6FA;");
 
+        // Create title label
         Label titleLabel = new Label("Lihat Daftar Restoran");
         titleLabel.setFont(Font.font("Times New Roman", 24));
         titleLabel.setTextFill(Color.DARKSLATEBLUE);
 
+        // Create combo box and list view
         viewRestaurantComboBox = new ComboBox<>();
         updateViewRestaurantComboBox();
         viewRestaurantComboBox.setPromptText("Pilih Restoran");
@@ -222,10 +252,12 @@ public class AdminMenu extends MemberMenu {
         menuListView = new ListView<>();
         menuListView.setStyle("-fx-control-inner-background: #D8BFD8;");
 
+        // Create back button
         Button backButton = new Button("Kembali");
         backButton.setStyle("-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 16px;");
         backButton.setOnAction(e -> stage.setScene(scene));
 
+        // Add components to grid
         grid.add(titleLabel, 0, 0, 2, 1);
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         grid.add(viewRestaurantComboBox, 0, 1, 2, 1);
@@ -239,9 +271,12 @@ public class AdminMenu extends MemberMenu {
         return new Scene(grid, 400, 600);
     }
 
+    // Method to handle adding a restaurant
     private void handleTambahRestoran(String nama) {
         String validName = DepeFood.getValidRestaurantName(nama);
+        // Check if the name is valid
         if (!validName.startsWith("Restoran dengan nama") && !validName.startsWith("Nama Restoran tidak valid")) {
+            // Add the restaurant
             DepeFood.handleTambahRestoran(nama);
             updateRestaurantComboBox();
             updateViewRestaurantComboBox();
@@ -251,8 +286,10 @@ public class AdminMenu extends MemberMenu {
         }
     }
 
+    // Method to handle adding a menu to a restaurant
     private void handleTambahMenuRestoran(Restaurant restaurant, String itemName, double price) {
         if (restaurant != null && itemName != null && !itemName.isEmpty() && price > 0) {
+            // Add the menu
             DepeFood.handleTambahMenuRestoran(restaurant, itemName, price);
             showAlert("Success", "Menu berhasil ditambahkan", Alert.AlertType.INFORMATION);
             updateMenuListView(restaurant.getNama()); // Ensure the menu list is updated
@@ -262,6 +299,7 @@ public class AdminMenu extends MemberMenu {
     }
 
     private void showAlert(String title, String content, Alert.AlertType alertType) {
+        // Create alert
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
@@ -271,23 +309,27 @@ public class AdminMenu extends MemberMenu {
         alert.showAndWait();
     }
 
+    // Method to update the restaurant combo box
     private void updateRestaurantComboBox() {
+        // Get restaurant names and update the combo box
         List<String> restaurantNames = DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());
         restaurantComboBox.setItems(FXCollections.observableArrayList(restaurantNames));
     }
 
+    // Method to update the view restaurant combo box
     private void updateViewRestaurantComboBox() {
         List<String> restaurantNames = DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());
         viewRestaurantComboBox.setItems(FXCollections.observableArrayList(restaurantNames));
     }
 
+    // Method to update the menu list view
     private void updateMenuListView(String restaurantName) {
         Restaurant restaurant = DepeFood.getRestaurantByName(restaurantName);
         if (restaurant != null) {
             menuListView.setItems(FXCollections.observableArrayList(
-                restaurant.getMenu().stream()
-                    .map(menu -> menu.getNamaMakanan() + " - Rp " + menu.getHarga())
-                    .collect(Collectors.toList())
+                    restaurant.getMenu().stream()
+                            .map(menu -> menu.getNamaMakanan() + " - Rp " + menu.getHarga())
+                            .collect(Collectors.toList())
             ));
         } else {
             menuListView.setItems(FXCollections.observableArrayList());
@@ -295,7 +337,9 @@ public class AdminMenu extends MemberMenu {
     }
 
     private void updateRestaurantListView() {
-        // Ensure this method is defined if used elsewhere
+        // Example implementation to update restaurantListView
+        List<String> restaurantNames = DepeFood.getRestoList().stream().map(Restaurant::getNama).collect(Collectors.toList());
+        restaurantListView.setItems(FXCollections.observableArrayList(restaurantNames));
     }
 
     public Scene getScene() {
