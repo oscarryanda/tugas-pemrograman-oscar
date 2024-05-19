@@ -26,7 +26,9 @@ public class MainApp extends Application {
         DepeFood.initUser(); // Initialize users
 
         // Initialize all scenes
-        Scene loginScene = new LoginForm(window, this).getScene();
+        LoginForm loginForm = new LoginForm(window, this);
+        Scene loginScene = loginForm.getScene();
+        loginScene.setUserData(loginForm); // Set the user data for the login scene
 
         // Populate all scenes map
         allScenes.put("Login", loginScene);
@@ -58,6 +60,10 @@ public class MainApp extends Application {
     public void logout() {
         setUser(null); // Clear the current user
         setScene(getScene("Login")); // Switch to the login scene
+
+        // Clear the user data from the login scene
+        LoginForm loginForm = (LoginForm) currentScene.getUserData();
+        loginForm.clearInputs();
     }
 
     public static void main(String[] args) {

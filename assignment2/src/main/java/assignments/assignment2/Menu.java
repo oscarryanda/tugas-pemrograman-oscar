@@ -1,9 +1,9 @@
 package assignments.assignment2;
 
 public class Menu {
-
+    
     private String namaMakanan;
-    private double harga;
+    private double harga; 
     public Menu(String namaMakanan, double harga){
         this.namaMakanan = namaMakanan;
         this.harga = harga;
